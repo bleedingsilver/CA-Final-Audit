@@ -1,0 +1,37 @@
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+    
+    // ===============================================================
+    // Assumed Data Model
+    // ===============================================================
+    // Collection: questions
+    // Fields: id, chapterName, source, text, correctAnswerHeading, keywords, repetitionCount, isExactRepetition, createdAt
+    //
+    // Collection: mtp_files
+    // Fields: id, fileName, processed, uploadedAt
+    // ===============================================================
+
+    // Helper Functions
+    function isAuthenticated() {
+      return request.auth != null;
+    }
+
+    function isAdmin() {
+      return isAuthenticated() && 
+        (request.auth.token.email == "gakhar.chelsie@gmail.com" && request.auth.token.email_verified == true);
+    }
+
+    // Questions: Publicly readable for authenticated users, writable by admin
+    match /questions/{questionId} {
+      allow read: if isAuthenticated();
+      allow write: if isAdmin();
+    }
+
+    // MTP Files: Tracking for admin
+    match /mtp_files/{fileId} {
+      allow read: if isAuthenticated();
+      allow write: if isAdmin();
+    }
+  }
+}

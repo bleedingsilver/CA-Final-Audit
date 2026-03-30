@@ -1,0 +1,46 @@
+{
+  "entities": {
+    "Question": {
+      "title": "Question",
+      "description": "A CA Final Audit question from Past Papers, RTPs, or MTPs.",
+      "type": "object",
+      "properties": {
+        "id": { "type": "string" },
+        "chapterName": { "type": "string" },
+        "source": { "type": "string" },
+        "text": { "type": "string" },
+        "correctAnswerHeading": { "type": "string" },
+        "keywords": {
+          "type": "array",
+          "items": { "type": "string" }
+        },
+        "repetitionCount": { "type": "integer" },
+        "isExactRepetition": { "type": "boolean" },
+        "createdAt": { "type": "string", "format": "date-time" }
+      },
+      "required": ["id", "chapterName", "source", "text", "correctAnswerHeading", "keywords"]
+    },
+    "MTPFile": {
+      "title": "MTP File",
+      "description": "Metadata about uploaded MTP files to avoid re-processing.",
+      "type": "object",
+      "properties": {
+        "id": { "type": "string" },
+        "fileName": { "type": "string" },
+        "processed": { "type": "boolean" },
+        "uploadedAt": { "type": "string", "format": "date-time" }
+      },
+      "required": ["id", "fileName", "processed"]
+    }
+  },
+  "firestore": {
+    "/questions": {
+      "schema": "Question",
+      "description": "The global baseline question bank."
+    },
+    "/mtp_files": {
+      "schema": "MTPFile",
+      "description": "Tracking of uploaded MTP files."
+    }
+  }
+}
